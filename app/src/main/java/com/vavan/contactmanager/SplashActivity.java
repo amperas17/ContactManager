@@ -11,7 +11,7 @@ import android.os.Bundle;
 public class SplashActivity extends AppCompatActivity implements Handler.Callback {
 
     private static final int MSG_CONTINUE = 101;
-    private static final long DELAY = 3000;
+    private static final long DELAY = 500;
     private Handler mHandler;
 
     @Override
