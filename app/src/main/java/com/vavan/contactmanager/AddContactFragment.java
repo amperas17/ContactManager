@@ -45,7 +45,7 @@ public class AddContactFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 DBHelper dbHelper = new DBHelper(getActivity());
-                dbHelper.addRecord("description",Boolean.FALSE,"path");
+                dbHelper.addRecord("path","description","phone",Boolean.FALSE);
             }
         });
 
@@ -61,8 +61,11 @@ public class AddContactFragment extends Fragment {
                     List<DBRecord> recordList = db.getAllRecord();
 
                     for (DBRecord record : recordList) {
-                        output = output + record.getDescription() + " - " + record.getIsFavorite()
-                                + record.getImagePath() + "\n";
+                        output = output +
+                                record.getImagePath()   + " - " +
+                                record.getDescription() + " - " +
+                                record.getPhoneNumber() + " - " +
+                                record.getIsFavorite()  + "\n";
                     }
                 }
                 tvOutput.setText(output);

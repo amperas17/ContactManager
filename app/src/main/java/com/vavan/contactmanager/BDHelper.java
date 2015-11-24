@@ -17,12 +17,14 @@ import java.util.List;
 class DBHelper extends SQLiteOpenHelper {
 
     public final static int DATABASE_VERSION = 1;
-    public final static String DATABASE_NAME = "transHistory";
-    public final static String TABLE_NAME = "transRecords";
+    public final static String DATABASE_NAME = "myContactsDB";
+    public final static String TABLE_NAME = "myContacts";
     public final static String COLUMN_ID = "_id";
-    public final static String COLUMN_DESCRIPTION = "description";
-    public final static String COLUMN_IS_FAVORITE = "is_favorite";
     public final static String COLUMN_IMAGE_PATH = "image_path";
+    public final static String COLUMN_DESCRIPTION = "description";
+    public final static String COLUMN_PHONE_NUMBER = "phone_number";
+    public final static String COLUMN_IS_FAVORITE = "is_favorite";
+
 
     public DBHelper(Context context){
         super(context,DBHelper.DATABASE_NAME,null,DBHelper.DATABASE_VERSION);
@@ -32,9 +34,10 @@ class DBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         String createTable = "create table " + DBHelper.TABLE_NAME + " (" +
                 DBHelper.COLUMN_ID + " integer primary key autoincrement, " +
+                DBHelper.COLUMN_IMAGE_PATH + " text not null," +
                 DBHelper.COLUMN_DESCRIPTION + " text not null," +
-                DBHelper.COLUMN_IS_FAVORITE + " smallint NOT NULL DEFAULT 0," +
-                DBHelper.COLUMN_IMAGE_PATH + " text not null);";
+                DBHelper.COLUMN_PHONE_NUMBER + " text not null," +
+                DBHelper.COLUMN_IS_FAVORITE + " smallint NOT NULL DEFAULT 0);";
         db.execSQL(createTable);
     }
 
@@ -46,14 +49,19 @@ class DBHelper extends SQLiteOpenHelper {
         }
     }
 
-    public void addRecord(String description, Boolean is_favorite,String image_path){
+    public void addRecord(String image_path,String description,String phone_number,Boolean is_favorite){
         if (description.length()>0 && image_path.length()>0){
             SQLiteDatabase db = this.getWritableDatabase();
+
             ContentValues cv = new ContentValues();
-            cv.put(DBHelper.COLUMN_DESCRIPTION,description);
-            cv.put(DBHelper.COLUMN_IS_FAVORITE,Boolean.FALSE);
             cv.put(DBHelper.COLUMN_IMAGE_PATH,image_path);
+            cv.put(DBHelper.COLUMN_DESCRIPTION,description);
+            cv.put(DBHelper.COLUMN_PHONE_NUMBER,phone_number);
+            cv.put(DBHelper.COLUMN_IS_FAVORITE,is_favorite);
+
+
             db.insert(DBHelper.TABLE_NAME, null, cv);
+
             db.close();
         }
 
@@ -78,10 +86,14 @@ class DBHelper extends SQLiteOpenHelper {
 
             do {
                 DBRecord record = new DBRecord();
+
                 record.setId(Integer.parseInt(cursor.getString(0)));
-                record.setDescription(cursor.getString(1));
-                record.setIsFavorite(Integer.parseInt(cursor.getString(2))==1);
-                record.setImagePath(cursor.getString(3));
+                record.setImagePath(cursor.getString(1));
+                record.setDescription(cursor.getString(2));
+                record.setPhoneNumber(cursor.getString(3));
+                record.setIsFavorite(Integer.parseInt(cursor.getString(4))==1);
+
+
                 recordList.add(record);
             } while(cursor.moveToNext());
 
