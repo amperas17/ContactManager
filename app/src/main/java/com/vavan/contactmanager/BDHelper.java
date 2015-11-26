@@ -10,6 +10,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,6 +69,15 @@ class DBHelper extends SQLiteOpenHelper {
 
     }
 
+    public void deleteRecord(Integer id){
+
+            SQLiteDatabase db = this.getWritableDatabase();
+
+            db.delete(DBHelper.TABLE_NAME, DBHelper.COLUMN_ID + " = " + id, null);
+
+            db.close();
+    }
+
     public int getRecordCount(){
         String query = "SELECT * FROM " + DBHelper.TABLE_NAME;
         SQLiteDatabase db = this.getReadableDatabase();
@@ -77,8 +88,8 @@ class DBHelper extends SQLiteOpenHelper {
     }
 
 
-    public List<DBRecord> getAllRecord(){
-        List<DBRecord> recordList = new ArrayList<>();
+    public ArrayList<DBRecord> getAllContactsArrayList(){
+        ArrayList<DBRecord> recordList = new ArrayList<>();
         String query = "SELECT * FROM " + DBHelper.TABLE_NAME;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(query, null);
@@ -101,5 +112,17 @@ class DBHelper extends SQLiteOpenHelper {
         return recordList;
     }
 
+    public Cursor getAllContactsCursor() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.query(DBHelper.TABLE_NAME, null, null, null, null, null, null);
+    }
+
+    public Cursor getAllFavoritesCursor() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT * FROM " + DBHelper.TABLE_NAME +
+                " WHERE " + DBHelper.COLUMN_IS_FAVORITE + " = 1;";
+        Cursor cursor = db.rawQuery(query, null);
+        return cursor;
+    }
 
 }

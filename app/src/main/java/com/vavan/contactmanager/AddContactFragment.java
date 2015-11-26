@@ -10,6 +10,8 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import java.util.List;
@@ -21,8 +23,11 @@ import java.util.List;
 
 public class AddContactFragment extends Fragment {
 
-    Button btAdd,btSelect;
+    Button btAdd,btSelect,btDelete;
     TextView tvOutput;
+    Integer firstRecordID=1;
+    EditText etName,etPhoneNumber;
+    CheckBox chbIsFavorite;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -40,12 +45,18 @@ public class AddContactFragment extends Fragment {
 
         tvOutput = (TextView)view.findViewById(R.id.tvDBList);
 
+        etName = (EditText)view.findViewById(R.id.etName);
+        etPhoneNumber = (EditText)view.findViewById(R.id.etPhoneNumber);
+        chbIsFavorite = (CheckBox)view.findViewById(R.id.chbIsFavoriteAddContact);
+
+
         btAdd = (Button)view.findViewById(R.id.btAdd);
         btAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 DBHelper dbHelper = new DBHelper(getActivity());
-                dbHelper.addRecord("path","description","phone",Boolean.FALSE);
+                dbHelper.addRecord("mypath",etName.getText().toString(),
+                        etPhoneNumber.getText().toString(),chbIsFavorite.isChecked());
             }
         });
 
@@ -58,10 +69,12 @@ public class AddContactFragment extends Fragment {
 
                 if (db.getRecordCount() > 0) {
 
-                    List<DBRecord> recordList = db.getAllRecord();
+                    List<DBRecord> recordList = db.getAllContactsArrayList();
 
+                    firstRecordID = recordList.get(0).getId();
                     for (DBRecord record : recordList) {
                         output = output +
+                                record.getId() + " - " +
                                 record.getImagePath()   + " - " +
                                 record.getDescription() + " - " +
                                 record.getPhoneNumber() + " - " +
@@ -69,6 +82,15 @@ public class AddContactFragment extends Fragment {
                     }
                 }
                 tvOutput.setText(output);
+            }
+        });
+
+        btDelete = (Button)view.findViewById(R.id.btDelete);
+        btDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DBHelper db = new DBHelper(getActivity());
+                db.deleteRecord(firstRecordID);
             }
         });
 

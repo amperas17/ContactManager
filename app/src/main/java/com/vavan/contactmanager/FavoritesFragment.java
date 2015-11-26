@@ -1,8 +1,13 @@
 package com.vavan.contactmanager;
 
 
+import android.content.Context;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -10,21 +15,16 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
-import java.util.List;
 
-
-public class FavoritesFragment extends ListFragment {
+public class FavoritesFragment extends ListFragment implements LoaderManager.LoaderCallbacks{
 
     DBHelper db;
-    ArrayList<DBRecord> dbRecords = new ArrayList<>();
-    ContactAdapter contactAdapter;
+    ContactCursorAdapter contactCursorAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         setHasOptionsMenu(true);
         super.onCreate(savedInstanceState);
-
 
     }
 
@@ -37,10 +37,9 @@ public class FavoritesFragment extends ListFragment {
 
         db = new DBHelper(getActivity());
 
-        dbRecords = db.getAllRecord();
-        contactAdapter = new ContactAdapter(getActivity(),dbRecords);
-        setListAdapter(contactAdapter);
-
+        Cursor cursor = db.getAllFavoritesCursor();
+        contactCursorAdapter = new ContactCursorAdapter(getActivity(),cursor,0);
+        setListAdapter(contactCursorAdapter);
 
         return view;
     }
@@ -55,6 +54,41 @@ public class FavoritesFragment extends ListFragment {
     @Override
     public void onResume() {
         super.onResume();
+        getLoaderManager().restartLoader(0, null, this);
+
+    }
+
+    @Override
+    public Loader onCreateLoader(int id, Bundle args) {
+        return new MyCursorLoader(getActivity(),db);
+    }
+
+    @Override
+    public void onLoadFinished(Loader loader, Object data) {
+
+        contactCursorAdapter.swapCursor((Cursor) data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader loader) {
+
+    }
+
+    static class MyCursorLoader extends CursorLoader {
+
+        DBHelper db;
+
+        public MyCursorLoader(Context context, DBHelper db) {
+            super(context);
+            this.db = db;
+        }
+
+        @Override
+        public Cursor loadInBackground() {
+            Cursor cursor = db.getAllFavoritesCursor();
+
+            return cursor;
+        }
 
     }
 }

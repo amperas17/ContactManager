@@ -7,7 +7,6 @@ import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -18,8 +17,9 @@ import android.view.ViewGroup;
 public class ContactsFragment extends ListFragment implements LoaderManager.LoaderCallbacks {
 
 
-    SimpleCursorAdapter scAdapter;
     DBHelper db;
+    ContactCursorAdapter contactCursorAdapter;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -34,20 +34,13 @@ public class ContactsFragment extends ListFragment implements LoaderManager.Load
 
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Contacts");
 
+
+
         db = new DBHelper(getActivity());
 
-        String[] from = new String[]{db.COLUMN_DESCRIPTION,
-                db.COLUMN_PHONE_NUMBER
-        };
-        int[] to = new int[]{R.id.tvDescription,R.id.tvPhoneNumber};
-
-
-
-        scAdapter = new SimpleCursorAdapter(getActivity(),R.layout.contact_list_item,null,from,to,0);
-
-        setListAdapter(scAdapter);
-
-        getActivity().getSupportLoaderManager().initLoader(0, null, this);
+        Cursor cursor = db.getAllContactsCursor();
+        contactCursorAdapter = new ContactCursorAdapter(getActivity(),cursor,0);
+        setListAdapter(contactCursorAdapter);
 
 
         return view;
@@ -77,7 +70,7 @@ public class ContactsFragment extends ListFragment implements LoaderManager.Load
     @Override
     public void onLoadFinished(Loader loader, Object data) {
 
-        scAdapter.swapCursor((Cursor)data);
+        contactCursorAdapter.swapCursor((Cursor)data);
     }
 
     @Override
@@ -96,7 +89,7 @@ public class ContactsFragment extends ListFragment implements LoaderManager.Load
 
         @Override
         public Cursor loadInBackground() {
-            Cursor cursor = db.getAllData();
+            Cursor cursor = db.getAllContactsCursor();
 
             return cursor;
         }
