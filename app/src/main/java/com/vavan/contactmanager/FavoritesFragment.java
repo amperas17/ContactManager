@@ -2,7 +2,7 @@ package com.vavan.contactmanager;
 
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.support.v4.app.ListFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -10,11 +10,15 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- */
-public class FavoritesFragment extends Fragment {
+
+public class FavoritesFragment extends ListFragment {
+
+    DBHelper db;
+    ArrayList<DBRecord> dbRecords = new ArrayList<>();
+    ContactAdapter contactAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -30,6 +34,13 @@ public class FavoritesFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_favorites, container, false);
 
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Favorites");
+
+        db = new DBHelper(getActivity());
+
+        dbRecords = db.getAllRecord();
+        contactAdapter = new ContactAdapter(getActivity(),dbRecords);
+        setListAdapter(contactAdapter);
+
 
         return view;
     }
