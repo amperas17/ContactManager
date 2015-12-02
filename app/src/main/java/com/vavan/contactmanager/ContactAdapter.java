@@ -49,10 +49,10 @@ public class ContactAdapter extends BaseAdapter {
         }
 
         DBRecord dbRecord = getRecord(position);
-        ((TextView)view.findViewById(R.id.tvDescription)).setText(dbRecord.getDescription());
-        ((TextView)view.findViewById(R.id.tvPhoneNumber)).setText(dbRecord.getPhoneNumber());
+        ((TextView)view.findViewById(R.id.tvDescriptionListItem)).setText(dbRecord.getDescription());
+        ((TextView)view.findViewById(R.id.tvPhoneNumberListItem)).setText(dbRecord.getPhoneNumber());
 
-        CheckBox chbIsFavorite = (CheckBox)view.findViewById(R.id.chbIsFavorite);
+        CheckBox chbIsFavorite = (CheckBox)view.findViewById(R.id.chbIsFavoriteListItem);
         chbIsFavorite.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

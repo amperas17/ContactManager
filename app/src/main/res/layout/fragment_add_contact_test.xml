@@ -9,9 +9,11 @@
 
     <ImageView
         android:id="@+id/ivPhotoAddContactFrag"
-        android:layout_width="100dp"
-        android:layout_height="150dp"
+        android:layout_width="140dp"
+        android:layout_height="180dp"
         android:scaleType="fitXY"
+        android:background="@drawable/image_style"
+        android:src="@drawable/messagephone"
         >
     </ImageView>
 

@@ -21,6 +21,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -28,11 +29,12 @@ import java.util.Date;
 import java.util.List;
 
 
-public class AddContactFragment extends Fragment {
+public class AddContactFragTest extends Fragment {
 
     final int REQUEST_CODE_PHOTO = 1;
     final String TAG = "myLogs";
 
+    String imagePath = "";
 
     Button btAdd,btSelect,btDelete;
     TextView tvOutput;
@@ -55,7 +57,7 @@ public class AddContactFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_add_contact, container, false);
+        View view = inflater.inflate(R.layout.fragment_add_contact_test, container, false);
 
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Add Contact");
 
@@ -72,7 +74,7 @@ public class AddContactFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 DBHelper dbHelper = new DBHelper(getActivity());
-                dbHelper.addRecord("mypath",etName.getText().toString(),
+                dbHelper.addRecord(imagePath,etName.getText().toString(),
                         etPhoneNumber.getText().toString(),chbIsFavorite.isChecked());
             }
         });
@@ -95,7 +97,7 @@ public class AddContactFragment extends Fragment {
                                 record.getImagePath()   + " - " +
                                 record.getDescription() + " - " +
                                 record.getPhoneNumber() + " - " +
-                                record.getIsFavorite()  + "\n";
+                                record.getIsFavorite()  + "\n\n";
                     }
                 }
                 tvOutput.setText(output);
@@ -120,7 +122,7 @@ public class AddContactFragment extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 intent.putExtra(MediaStore.EXTRA_OUTPUT,generateFileUri());
-                //intent.putExtra("_id",)
+
                 startActivityForResult(intent, REQUEST_CODE_PHOTO);
             }
         });
@@ -160,46 +162,49 @@ public class AddContactFragment extends Fragment {
     }
 
     private Uri generateFileUri() {
-        //DBHelper db = new DBHelper(getActivity());
         File file = null;
-        file = new File(directory.getPath() + "/" + "photo_"
+        imagePath = directory.getPath() + "/" + "photo_"
                 + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date())
-                + ".jpg");
+                + ".jpg";
+        file = new File(imagePath);
 
         return Uri.fromFile(file);
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode,
-                                    Intent intent) {
-
-
+    public void onActivityResult(int requestCode, int resultCode,Intent intent) {
         if (resultCode == Activity.RESULT_OK) {
-            if (intent == null) {
-                Log.d(TAG, "Intent is null");
-                DBHelper db = new DBHelper(getActivity());
-                File file = new File(directory.getPath() + "/" + "photo_"
-                        + (db.getLastID()+1) + ".jpg");
-                //Bitmap bitmap = Bitmap.createBitmap(file)  ;
-                ivPhoto.setImageURI(Uri.fromFile(file));
+            ivPhoto.setImageURI(Uri.parse(imagePath));
 
-            } else {
-                Log.d(TAG, "Photo uri: " + intent.getData());
-                Bundle bundle = intent.getExtras();
-                if (bundle != null) {
-                    Object obj = intent.getExtras().get("data");
-                    if (obj instanceof Bitmap) {
-                        Bitmap bitmap = (Bitmap) obj;
-                        Log.d(TAG, "bitmap " + bitmap.getWidth() + " x "
-                                + bitmap.getHeight());
-                        ivPhoto.setImageBitmap(bitmap);
-                    }
-                }
-            }
         } else if (resultCode == Activity.RESULT_CANCELED) {
-            Log.d(TAG, "Canceled");
+            Toast toast = Toast.makeText(getActivity(), "Photo didn`t make!", Toast.LENGTH_SHORT);
+            toast.show();
         }
 
+        /*if (resultCode == Activity.RESULT_OK) {
+            Bundle bundle = intent.getExtras();
+            if (bundle != null) {
+                Object obj = intent.getExtras().get("data");
+                if (obj instanceof Bitmap) {
+                    Bitmap bitmap = (Bitmap) obj;
+
+                    File file = null;
+                    imagePath = directory.getPath() + "/" + "photo_"
+                            + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date())
+                            + ".jpg";
+                    file = new File(imagePath);
+
+
+
+
+                    ivPhoto.setImageBitmap(bitmap);
+                }
+            }
+        }
+        else if (resultCode == Activity.RESULT_CANCELED) {
+            Toast toast = Toast.makeText(getActivity(), "Photo didn`t make!", Toast.LENGTH_SHORT);
+            toast.show();
+        }*/
 
     }
 }

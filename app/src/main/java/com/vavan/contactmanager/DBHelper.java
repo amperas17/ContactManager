@@ -61,20 +61,15 @@ class DBHelper extends SQLiteOpenHelper {
             cv.put(DBHelper.COLUMN_PHONE_NUMBER,phone_number);
             cv.put(DBHelper.COLUMN_IS_FAVORITE,is_favorite);
 
-
             db.insert(DBHelper.TABLE_NAME, null, cv);
-
             db.close();
         }
 
     }
 
     public void deleteRecord(Integer id){
-
             SQLiteDatabase db = this.getWritableDatabase();
-
             db.delete(DBHelper.TABLE_NAME, DBHelper.COLUMN_ID + " = " + id, null);
-
             db.close();
     }
 
@@ -110,6 +105,17 @@ class DBHelper extends SQLiteOpenHelper {
 
         }
         return recordList;
+    }
+
+    public int getLastID(){
+        int lastID=0;
+        String query = "SELECT * FROM " + DBHelper.TABLE_NAME;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.moveToLast())
+            lastID = Integer.parseInt(cursor.getString(0));
+
+        return lastID;
     }
 
     public Cursor getAllContactsCursor() {

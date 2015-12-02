@@ -3,30 +3,34 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/linepaperbitmap"
     >
 
+
+
     <ImageView
-        android:id="@+id/ivPhoto"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:id="@+id/ivPhotoListItem"
+        android:layout_width="@dimen/image_size"
+        android:layout_height="@dimen/image_size"
         android:layout_margin="10dp"
         android:layout_gravity="center_vertical"
         android:scaleType="fitXY"
         android:src="@drawable/ic_stat_messagephone"
+        android:background="@drawable/image_style"
         />
 
+
+
     <LinearLayout
-        android:id="@+id/llContactInfo"
+        android:id="@+id/llContactInfoListItem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_toRightOf="@+id/ivPhoto"
+        android:layout_toRightOf="@+id/ivPhotoListItem"
         android:padding="10dp"
         >
 
         <TextView
-            android:id="@+id/tvDescription"
+            android:id="@+id/tvDescriptionListItem"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="10dp"
@@ -36,7 +40,7 @@
             />
 
         <TextView
-            android:id="@+id/tvPhoneNumber"
+            android:id="@+id/tvPhoneNumberListItem"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="10dp"
@@ -50,12 +54,24 @@
 
 
     <CheckBox
-        android:id="@+id/chbIsFavorite"
+        android:id="@+id/chbIsFavoriteListItem"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_marginRight="20dp"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
         />
+
+    <TextView
+        android:id="@+id/tvContactIDListItem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:layout_below="@+id/chbIsFavoriteListItem"
+        android:layout_toRightOf="@+id/llContactInfoListItem"
+        android:textColor="#000"
+        android:text="12"/>
 
 </RelativeLayout>

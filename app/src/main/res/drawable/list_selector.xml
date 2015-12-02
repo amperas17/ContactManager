@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:exitFadeDuration="@android:integer/config_mediumAnimTime">
+    <item android:state_activated="true"
+        android:drawable="@android:drawable/list_selector_background"  />
+    <item  android:drawable="@android:drawable/list_selector_background" />
+</selector>

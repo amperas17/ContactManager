@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.view.Menu;
 
 public class AddContactActivity extends AppCompatActivity {
-    AddContactFragment addContactFragment;
+    AddContactFragTest addContactFragment;
     FragmentTransaction fragmentTransaction;
 
     @Override
@@ -17,7 +17,7 @@ public class AddContactActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setIcon(R.drawable.ic_stat_messagephone);
 
-        addContactFragment = new AddContactFragment();
+        addContactFragment = new AddContactFragTest();
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.add(R.id.container,addContactFragment);
         fragmentTransaction.commit();
@@ -28,6 +28,7 @@ public class AddContactActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_add_contact, menu);
         return true;
     }
+
 
 
 }

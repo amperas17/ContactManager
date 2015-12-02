@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         View tabView = createTabView(this, "Contacts");
 
         mTabHost.addTab(mTabHost.newTabSpec("contacts").setIndicator(tabView),
-                ContactsFragment.class, null);
+                ContactsFragment.class,null);
 
         tabView = createTabView(this, "Favorites");
         mTabHost.addTab(mTabHost.newTabSpec("favorites").setIndicator(tabView),
