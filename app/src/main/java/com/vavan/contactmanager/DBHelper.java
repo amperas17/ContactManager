@@ -67,6 +67,17 @@ class DBHelper extends SQLiteOpenHelper {
 
     }
 
+    public void updateRecord(Integer id,Boolean is_favorite){
+
+            SQLiteDatabase db = this.getWritableDatabase();
+
+            ContentValues cv = new ContentValues();
+            cv.put(DBHelper.COLUMN_IS_FAVORITE,is_favorite);
+            db.update(DBHelper.TABLE_NAME,cv,DBHelper.COLUMN_ID+"="+id,null);
+            db.close();
+
+    }
+
     public void deleteRecord(Integer id){
             SQLiteDatabase db = this.getWritableDatabase();
             db.delete(DBHelper.TABLE_NAME, DBHelper.COLUMN_ID + " = " + id, null);

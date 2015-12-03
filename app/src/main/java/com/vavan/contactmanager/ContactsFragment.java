@@ -28,19 +28,18 @@ public class ContactsFragment extends ListFragment implements LoaderManager.Load
 
     DBHelper db;
     ContactCursorAdapter contactCursorAdapter;
-    ListView listView;
-    Boolean checked = false;
     Integer contactForDeletingBDID=0;
-    Integer contactForDeletingLVID=0;
+    Integer contactForDeletingLVPosition =0;
     String contactDescriptionForDeleting = null;
 
-    AlertDialog.Builder ad;
+    AlertDialog.Builder alertDialog;
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         setHasOptionsMenu(true);
         super.onCreate(savedInstanceState);
+
     }
 
     @Override
@@ -49,26 +48,37 @@ public class ContactsFragment extends ListFragment implements LoaderManager.Load
         contactForDeletingBDID = Integer.parseInt(((TextView)
                 v.findViewById(R.id.tvContactIDListItem)).getText().toString());
 
-        contactDescriptionForDeleting = ((TextView)v
-                .findViewById(R.id.tvDescriptionListItem)).getText().toString();
-        contactForDeletingLVID = position;
+        contactDescriptionForDeleting =  ((TextView)v.findViewById(R.id.tvDescriptionListItem)).getText().toString();
+
+        contactForDeletingLVPosition = position;
 
         DBHelper db = new DBHelper(getActivity());
-        //db.deleteRecord(Integer.parseInt (((TextView)v.findViewById(R.id.tvContactIDListItem)).getText().toString()));
-        Toast.makeText(getActivity(), ((TextView)v.findViewById(R.id.tvContactIDListItem)).getText(),
-                Toast.LENGTH_SHORT).show();
-
-
-
-        CheckBox chbIsFavorite = (CheckBox)v.findViewById(R.id.chbIsFavoriteListItem);
-        if (chbIsFavorite.isChecked())
-            chbIsFavorite.setChecked(false);
-        else
-            chbIsFavorite.setChecked(true);
+        Toast.makeText(getActivity(), "Press \"Delete\" to delete "+contactDescriptionForDeleting, Toast.LENGTH_SHORT).show();
 
     }
 
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
 
+        super.onActivityCreated(savedInstanceState);
+        getListView().setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                CheckBox chbIsFavorite = (CheckBox) view.findViewById(R.id.chbIsFavoriteListItem);
+                if (chbIsFavorite.isChecked()) {
+                    db.updateRecord(Integer.parseInt(((TextView) view.findViewById(R.id.tvContactIDListItem)).getText().toString()), false);
+                    chbIsFavorite.setChecked(false);
+                } else {
+                    chbIsFavorite.setChecked(true);
+                    db.updateRecord(Integer.parseInt(((TextView) view.findViewById(R.id.tvContactIDListItem)).getText().toString()), true);
+                }
+
+                //getParentFragment().onResume();
+
+                return true;
+            }
+        });
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -84,10 +94,10 @@ public class ContactsFragment extends ListFragment implements LoaderManager.Load
 
         setListAdapter(contactCursorAdapter);
 
-        ad = new AlertDialog.Builder(getActivity());
-        ad.setTitle("Attention!");
-        ad.setMessage("Are you sure you want to delete " + contactDescriptionForDeleting +"?"); // сообщение
-        ad.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        alertDialog = new AlertDialog.Builder(getActivity());
+        alertDialog.setTitle("Attention!");
+        alertDialog.setMessage("Are you sure you want to delete " + contactDescriptionForDeleting + "?"); // сообщение
+        alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int arg1) {
                 DBHelper db = new DBHelper(getActivity());
                 db.deleteRecord(contactForDeletingBDID);
@@ -95,14 +105,13 @@ public class ContactsFragment extends ListFragment implements LoaderManager.Load
 
             }
         });
-        ad.setNegativeButton("No", new DialogInterface.OnClickListener() {
+        alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int arg1) {
-                Toast.makeText(getActivity(), "No", Toast.LENGTH_LONG)
-                        .show();
+
             }
         });
-        ad.setCancelable(true);
-        ad.setOnCancelListener(new DialogInterface.OnCancelListener() {
+        alertDialog.setCancelable(true);
+        alertDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
             public void onCancel(DialogInterface dialog) {
 
             }
@@ -119,20 +128,11 @@ public class ContactsFragment extends ListFragment implements LoaderManager.Load
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.btDeleteMenuItem:
-                /*Toast.makeText(getActivity(),
-                        ""+getActivity().getSupportFragmentManager()
-                                .getFragments().get(0).getView().toString(),
-                        ""+((TextView)getListView().getChildAt(contactForDeletingBDID)
-                                .findViewById(R.id.tvDescriptionListItem)).getText().toString(),
-                        Toast.LENGTH_LONG).show();*/
-
-                //DBHelper db = new DBHelper(getActivity());
-                //db.deleteRecord(contactForDeletingBDID);
-                //getActivity().getSupportFragmentManager().getFragments().get(0).onResume();
                 if (contactDescriptionForDeleting != null ){
-                    ad.show();
+                    alertDialog.setMessage("Are you sure you want to delete " + contactDescriptionForDeleting + "?");
+                    alertDialog.show();
                 } else {
-                    Toast.makeText(getActivity(),"Chose contact for delete!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(),"Chose contact first!", Toast.LENGTH_LONG).show();
                 }
 
                 return true;
@@ -140,17 +140,13 @@ public class ContactsFragment extends ListFragment implements LoaderManager.Load
                 return super.onOptionsItemSelected(item);
         }
 
-
     }
 
     @Override
     public void onResume() {
         super.onResume();
         getLoaderManager().restartLoader(0, null, this);
-
     }
-
-
 
 
 
