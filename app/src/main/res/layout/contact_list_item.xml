@@ -14,7 +14,7 @@
         android:layout_margin="10dp"
         android:layout_gravity="center_vertical"
         android:scaleType="fitXY"
-        android:src="@drawable/ic_stat_messagephone"
+        android:src="@drawable/contact_image"
         android:background="@drawable/image_style"
         />
 

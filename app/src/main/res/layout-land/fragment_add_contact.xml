@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:background="@drawable/linepaperbitmap"
     android:layout_margin="5dp"
     android:descendantFocusability="beforeDescendants"
@@ -12,10 +12,10 @@
 
             <LinearLayout
                 android:id="@+id/llImageContainerAddContactFrag"
-                android:layout_height="0dp"
-                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_width="0dp"
                 android:orientation="vertical"
-                android:layout_weight="2">
+                android:layout_weight="1">
 
                 <ImageButton
                     android:id="@+id/ibPhotoAddContactFrag"
@@ -30,12 +30,22 @@
             </LinearLayout>
 
 
-            <LinearLayout
+            <RelativeLayout
                 android:id="@+id/llDataContainerAddContactFrag"
-                android:layout_height="0dp"
-                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_width="0dp"
                 android:layout_weight="1"
                 android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="20dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true">
+
 
                 <EditText
                     android:id="@+id/etNameAddContactFrag"
@@ -43,7 +53,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"
                     android:hint="Enter the name"
                     android:textColor="#000"
@@ -66,8 +76,8 @@
                     android:textSize="22sp"
                     android:background="@drawable/rounded_edit_text"
                     />
+                </LinearLayout>
 
-
-            </LinearLayout>
+            </RelativeLayout>
 
 </LinearLayout>

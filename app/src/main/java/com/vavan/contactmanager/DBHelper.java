@@ -52,7 +52,7 @@ class DBHelper extends SQLiteOpenHelper {
     }
 
     public void addRecord(String image_path,String description,String phone_number,Boolean is_favorite){
-        if (description.length()>0 && image_path.length()>0){
+        if (description.length()>0 || phone_number.length()>0){
             SQLiteDatabase db = this.getWritableDatabase();
 
             ContentValues cv = new ContentValues();
@@ -67,14 +67,29 @@ class DBHelper extends SQLiteOpenHelper {
 
     }
 
-    public void updateRecord(Integer id,Boolean is_favorite){
+    public void updateRecord(Integer id,String image_path,String description,String phone_number,Boolean is_favorite){
 
             SQLiteDatabase db = this.getWritableDatabase();
 
             ContentValues cv = new ContentValues();
+            cv.put(DBHelper.COLUMN_IMAGE_PATH,image_path);
+            cv.put(DBHelper.COLUMN_DESCRIPTION,description);
+            cv.put(DBHelper.COLUMN_PHONE_NUMBER,phone_number);
             cv.put(DBHelper.COLUMN_IS_FAVORITE,is_favorite);
+
             db.update(DBHelper.TABLE_NAME,cv,DBHelper.COLUMN_ID+"="+id,null);
             db.close();
+
+    }
+
+    public void updateRecordIsFavorite(Integer id,Boolean is_favorite){
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues cv = new ContentValues();
+        cv.put(DBHelper.COLUMN_IS_FAVORITE,is_favorite);
+        db.update(DBHelper.TABLE_NAME,cv,DBHelper.COLUMN_ID+"="+id,null);
+        db.close();
 
     }
 
@@ -140,6 +155,24 @@ class DBHelper extends SQLiteOpenHelper {
                 " WHERE " + DBHelper.COLUMN_IS_FAVORITE + " = 1;";
         Cursor cursor = db.rawQuery(query, null);
         return cursor;
+    }
+
+    public DBRecord getRecord(Integer _id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT * FROM " + DBHelper.TABLE_NAME +
+                " WHERE " + DBHelper.COLUMN_ID + " = " + _id + ";";
+        Cursor cursor = db.rawQuery(query, null);
+
+        DBRecord record = new DBRecord();
+        if(cursor.moveToFirst()) {
+
+            record.setId(Integer.parseInt(cursor.getString(0)));
+            record.setImagePath(cursor.getString(1));
+            record.setDescription(cursor.getString(2));
+            record.setPhoneNumber(cursor.getString(3));
+            record.setIsFavorite(Integer.parseInt(cursor.getString(4)) == 1);
+        }
+        return record;
     }
 
 }

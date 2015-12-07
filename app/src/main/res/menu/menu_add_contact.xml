@@ -4,9 +4,5 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.vavan.contactmanager.AddContactActivity">
 
-    <item
-        android:id="@+id/btAddMenuItem"
-        app:showAsAction="always"
-        android:title="add">
-    </item>
+
 </menu>

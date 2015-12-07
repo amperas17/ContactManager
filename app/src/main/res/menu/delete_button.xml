@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item
-        android:id="@+id/btDeleteMenuItem"
-        app:showAsAction="always"
-        android:title="delete">
-    </item>
+    <group android:id="@+id/group_delete"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/btDeleteMenuItem"
+            app:showAsAction="always"
+            android:title="delete"
+            android:icon="@drawable/delete_contact_icon">
+        </item>
+    </group>
 </menu>

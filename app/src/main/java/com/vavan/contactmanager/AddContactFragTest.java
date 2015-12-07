@@ -23,7 +23,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -121,8 +125,7 @@ public class AddContactFragTest extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                intent.putExtra(MediaStore.EXTRA_OUTPUT,generateFileUri());
-
+                //intent.putExtra(MediaStore.EXTRA_OUTPUT,generateFileUri());
                 startActivityForResult(intent, REQUEST_CODE_PHOTO);
             }
         });
@@ -173,29 +176,22 @@ public class AddContactFragTest extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode,Intent intent) {
-        if (resultCode == Activity.RESULT_OK) {
+        /*if (resultCode == Activity.RESULT_OK) {
             ivPhoto.setImageURI(Uri.parse(imagePath));
 
         } else if (resultCode == Activity.RESULT_CANCELED) {
             Toast toast = Toast.makeText(getActivity(), "Photo didn`t make!", Toast.LENGTH_SHORT);
             toast.show();
-        }
+        }*/
 
-        /*if (resultCode == Activity.RESULT_OK) {
+        if (resultCode == Activity.RESULT_OK) {
             Bundle bundle = intent.getExtras();
             if (bundle != null) {
                 Object obj = intent.getExtras().get("data");
                 if (obj instanceof Bitmap) {
                     Bitmap bitmap = (Bitmap) obj;
 
-                    File file = null;
-                    imagePath = directory.getPath() + "/" + "photo_"
-                            + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date())
-                            + ".jpg";
-                    file = new File(imagePath);
-
-
-
+                    storeImage(bitmap);
 
                     ivPhoto.setImageBitmap(bitmap);
                 }
@@ -204,7 +200,34 @@ public class AddContactFragTest extends Fragment {
         else if (resultCode == Activity.RESULT_CANCELED) {
             Toast toast = Toast.makeText(getActivity(), "Photo didn`t make!", Toast.LENGTH_SHORT);
             toast.show();
-        }*/
+        }
 
     }
+
+    private boolean storeImage(Bitmap imageData) {
+        try {
+            imagePath = directory.getPath() + "/" + "photo_"
+                    + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date())
+                    + ".jpg";
+
+            FileOutputStream fileOutputStream = new FileOutputStream(imagePath);
+            BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(fileOutputStream);
+
+            imageData.compress(Bitmap.CompressFormat.PNG, 100, bufferedOutputStream);
+
+            bufferedOutputStream.flush();
+            bufferedOutputStream.close();
+
+        } catch (FileNotFoundException e) {
+            Log.w("TAG", "Error saving image file: " + e.getMessage());
+            return false;
+        } catch (IOException e) {
+            Log.w("TAG", "Error saving image file: " + e.getMessage());
+            return false;
+        }
+
+        return true;
+    }
+    
+    
 }

@@ -42,8 +42,8 @@ public class ContactCursorAdapter extends CursorAdapter{
         picasso.with(context)
                 .load(file)
                 .resizeDimen(R.dimen.image_size, R.dimen.image_size)
-                .placeholder(R.drawable.messagephone)
-                .error(R.drawable.messagephone)
+                .placeholder(R.drawable.contact_image)
+                .error(R.drawable.contact_image)
                 .centerInside()
                 .into(ivPhoto);
 
