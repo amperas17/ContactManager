@@ -39,8 +39,6 @@ import java.util.List;
 public class AddContactFragment extends Fragment {
     final int REQUEST_CODE_PHOTO = 1;
 
-
-
     DBHelper db;
 
     File directory;
@@ -53,13 +51,11 @@ public class AddContactFragment extends Fragment {
     Integer contactEditingId = null;
 
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         setHasOptionsMenu(true);
         db = new DBHelper(getActivity());
         createDirectory();
-
         super.onCreate(savedInstanceState);
     }
 
@@ -83,7 +79,6 @@ public class AddContactFragment extends Fragment {
             }
         });
 
-        //contactEditingId = Integer.parseInt(getArguments().getString("ContactID"));
 
         if (getArguments()!=null) {
             contactEditingId = Integer.parseInt(getArguments().getString("ContactID"));
@@ -91,18 +86,21 @@ public class AddContactFragment extends Fragment {
             DBRecord contactRecord = db.getRecord(contactEditingId);
             etName.setText(contactRecord.getDescription());
             etPhone.setText(contactRecord.getPhoneNumber());
-            ibPhoto.setImageURI(Uri.parse(contactRecord.getImagePath()));
-            contactImage = ((BitmapDrawable)ibPhoto.getDrawable()).getBitmap();
-            imagePath = contactRecord.getImagePath();
-        }
 
+            imagePath = contactRecord.getImagePath();
+            ibPhoto.setImageURI(Uri.parse(contactRecord.getImagePath()));
+
+            if (ibPhoto.getDrawable() != null){
+                contactImage = ((BitmapDrawable)ibPhoto.getDrawable()).getBitmap();
+            }
+        }
 
         return view;
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-        //setRetainInstance(true);
+
         if (savedInstanceState!=null){
             etName.setText(savedInstanceState.getString("Name"));
             etPhone.setText(savedInstanceState.getString("Phone"));
@@ -112,6 +110,7 @@ public class AddContactFragment extends Fragment {
                 ibPhoto.setImageResource(R.drawable.contact_image);
             }
             contactImage = (Bitmap) savedInstanceState.getParcelable("bitmap");
+            imagePath = savedInstanceState.getString("imagePath");
         }
         super.onActivityCreated(savedInstanceState);
 
@@ -147,8 +146,10 @@ public class AddContactFragment extends Fragment {
 
                     if (etName.getText().length() > 0 || etPhone.getText().length() > 0) {
                         DBHelper db = new DBHelper(getActivity());
-                        db.addRecord(imagePath, etName.getText().toString(),
-                                etPhone.getText().toString(), Boolean.FALSE);
+                        db.addRecord(imagePath,
+                                etName.getText().toString(),
+                                etPhone.getText().toString(),
+                                Boolean.FALSE);
                         getActivity().onBackPressed();
 
                     } else {
@@ -164,19 +165,14 @@ public class AddContactFragment extends Fragment {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
+        outState.putString("imagePath", imagePath);
         outState.putString("Name", etName.getText().toString());
         outState.putString("Phone", etPhone.getText().toString());
-        outState.putParcelable("bitmap",contactImage);
+        outState.putParcelable("bitmap", contactImage);
         super.onSaveInstanceState(outState);
 
     }
 
-
-
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
 
     private void createDirectory() {
         directory = new File(

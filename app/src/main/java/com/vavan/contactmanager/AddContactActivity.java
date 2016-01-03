@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 
 public class AddContactActivity extends AppCompatActivity {
@@ -21,7 +20,6 @@ public class AddContactActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         Bundle data = null;
-        Log.d("MyLog", "intent " + getIntent());
 
         if (intent.getStringExtra("ContactID") != null) {
             data = new Bundle();
