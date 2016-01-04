@@ -1,6 +1,5 @@
 package com.vavan.contactmanager;
 
-
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -92,6 +91,8 @@ public class AddContactFragment extends Fragment {
 
             if (ibPhoto.getDrawable() != null){
                 contactImage = ((BitmapDrawable)ibPhoto.getDrawable()).getBitmap();
+            } else {
+                ibPhoto.setImageResource(R.drawable.contact_image);
             }
         }
 
@@ -119,7 +120,6 @@ public class AddContactFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         if (menu.size() == 0)
         inflater.inflate(R.menu.add_button, menu);
-
     }
 
     @Override
@@ -142,7 +142,6 @@ public class AddContactFragment extends Fragment {
                     }
 
                 } else {
-
 
                     if (etName.getText().length() > 0 || etPhone.getText().length() > 0) {
                         DBHelper db = new DBHelper(getActivity());
@@ -170,9 +169,7 @@ public class AddContactFragment extends Fragment {
         outState.putString("Phone", etPhone.getText().toString());
         outState.putParcelable("bitmap", contactImage);
         super.onSaveInstanceState(outState);
-
     }
-
 
     private void createDirectory() {
         directory = new File(

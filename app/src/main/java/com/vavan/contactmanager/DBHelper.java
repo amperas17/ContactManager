@@ -149,10 +149,20 @@ class DBHelper extends SQLiteOpenHelper {
         return db.query(DBHelper.TABLE_NAME, null, null, null, null, null, null);
     }
 
+    public Cursor getAllContactsSortedCursor() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT * FROM " + DBHelper.TABLE_NAME +
+                " ORDER BY " + DBHelper.COLUMN_DESCRIPTION + ";";
+        Cursor cursor = db.rawQuery(query, null);
+        return cursor;
+    }
+
     public Cursor getAllFavoritesCursor() {
         SQLiteDatabase db = this.getReadableDatabase();
         String query = "SELECT * FROM " + DBHelper.TABLE_NAME +
-                " WHERE " + DBHelper.COLUMN_IS_FAVORITE + " = 1;";
+                " WHERE " + DBHelper.COLUMN_IS_FAVORITE + " = 1" +
+                " ORDER BY " + DBHelper.COLUMN_DESCRIPTION + ";";
+
         Cursor cursor = db.rawQuery(query, null);
         return cursor;
     }

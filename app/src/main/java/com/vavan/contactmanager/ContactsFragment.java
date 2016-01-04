@@ -51,7 +51,7 @@ public class ContactsFragment extends ListFragment implements LoaderManager.Load
 
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Contacts");
 
-        Cursor cursor = db.getAllContactsCursor();
+        Cursor cursor = db.getAllContactsSortedCursor();
         contactCursorAdapter = new ContactCursorAdapter(getActivity(),cursor,0);
 
         setListAdapter(contactCursorAdapter);
@@ -192,8 +192,7 @@ public class ContactsFragment extends ListFragment implements LoaderManager.Load
 
         @Override
         public Cursor loadInBackground() {
-            Cursor cursor = db.getAllContactsCursor();
-
+            Cursor cursor = db.getAllContactsSortedCursor();
             return cursor;
         }
 
