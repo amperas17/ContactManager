@@ -26,7 +26,6 @@ import android.widget.Toast;
 
 public class ContactsFragment extends ListFragment implements LoaderManager.LoaderCallbacks {
 
-
     DBHelper db;
     ContactCursorAdapter contactCursorAdapter;
     Integer contactSelectedBDID =0;
@@ -91,7 +90,7 @@ public class ContactsFragment extends ListFragment implements LoaderManager.Load
         getListView().setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                view.setBackgroundColor(getResources().getColor(R.color.transparent));
+
                 CheckBox chbIsFavorite = (CheckBox) view.findViewById(R.id.chbIsFavoriteListItem);
                 if (chbIsFavorite.isChecked()) {
                     db.updateRecordIsFavorite(Integer.parseInt
@@ -102,6 +101,8 @@ public class ContactsFragment extends ListFragment implements LoaderManager.Load
                     db.updateRecordIsFavorite(Integer.parseInt
                             (((TextView) view.findViewById(R.id.tvContactIDListItem)).getText().toString()), true);
                 }
+                //view.setBackgroundColor(getResources().getColor(R.color.transparent));
+                getActivity().getSupportFragmentManager().getFragments().get(0).onResume();
 
                 return true;
             }
@@ -158,6 +159,9 @@ public class ContactsFragment extends ListFragment implements LoaderManager.Load
     public void onResume() {
         super.onResume();
         getLoaderManager().restartLoader(0, null, this);
+        contactSelectedBDID = 0;
+        contactSelectedDescription = null;
+        contactSelectedPhoneNumber = null;
     }
 
     @Override

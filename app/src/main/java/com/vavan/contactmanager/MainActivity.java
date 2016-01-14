@@ -49,7 +49,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
     }
 
     private static View createTabView(Context context, String tabText) {

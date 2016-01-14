@@ -24,6 +24,8 @@
                     android:scaleType="fitXY"
                     android:src="@drawable/contact_image"
                     android:background="@drawable/image_style"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
                     >
                 </ImageButton>
 
