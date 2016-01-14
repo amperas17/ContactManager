@@ -46,6 +46,7 @@ public class AddContactFragment extends Fragment {
 
     String imagePath = "";
     Bitmap contactImage;
+    Boolean isFavorite = false;
 
     Integer contactEditingId = null;
 
@@ -61,6 +62,9 @@ public class AddContactFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.d("MyLog", "AddContactFrag  onCreateView");
+
+
 
         View view = inflater.inflate(R.layout.fragment_add_contact, container, false);
 
@@ -80,19 +84,28 @@ public class AddContactFragment extends Fragment {
 
 
         if (getArguments()!=null) {
-            contactEditingId = Integer.parseInt(getArguments().getString("ContactID"));
+            Log.d("MyLog", getArguments().toString());
+            if (getArguments().getString("ContactID")!=null){
+                contactEditingId = Integer.parseInt(getArguments().getString("ContactID"));
 
-            DBRecord contactRecord = db.getRecord(contactEditingId);
-            etName.setText(contactRecord.getDescription());
-            etPhone.setText(contactRecord.getPhoneNumber());
+                DBRecord contactRecord = db.getRecord(contactEditingId);
+                etName.setText(contactRecord.getDescription());
+                etPhone.setText(contactRecord.getPhoneNumber());
 
-            imagePath = contactRecord.getImagePath();
-            ibPhoto.setImageURI(Uri.parse(contactRecord.getImagePath()));
+                imagePath = contactRecord.getImagePath();
+                ibPhoto.setImageURI(Uri.parse(contactRecord.getImagePath()));
+                isFavorite = contactRecord.getIsFavorite();
+                if (ibPhoto.getDrawable() != null) {
+                    contactImage = ((BitmapDrawable) ibPhoto.getDrawable()).getBitmap();
+                } else {
+                    ibPhoto.setImageResource(R.drawable.contact_image);
+                }
+            } else
 
-            if (ibPhoto.getDrawable() != null){
-                contactImage = ((BitmapDrawable)ibPhoto.getDrawable()).getBitmap();
+            if (getArguments().getString("IsFavorite").equals("true")) {
+                isFavorite = true;
             } else {
-                ibPhoto.setImageResource(R.drawable.contact_image);
+                isFavorite = false;
             }
         }
 
@@ -110,8 +123,9 @@ public class AddContactFragment extends Fragment {
             } else {
                 ibPhoto.setImageResource(R.drawable.contact_image);
             }
-            contactImage = (Bitmap) savedInstanceState.getParcelable("bitmap");
-            imagePath = savedInstanceState.getString("imagePath");
+            contactImage = (Bitmap) savedInstanceState.getParcelable("Bitmap");
+            imagePath = savedInstanceState.getString("ImagePath");
+            isFavorite = savedInstanceState.getBoolean("IsFavorite");
         }
         super.onActivityCreated(savedInstanceState);
 
@@ -134,7 +148,7 @@ public class AddContactFragment extends Fragment {
                                 imagePath,
                                 etName.getText().toString(),
                                 etPhone.getText().toString(),
-                                Boolean.FALSE);
+                                isFavorite);
                                 getActivity().onBackPressed();
                     } else {
                         Toast.makeText(getActivity(), "Enter the name and the phone number!",
@@ -148,7 +162,7 @@ public class AddContactFragment extends Fragment {
                         db.addRecord(imagePath,
                                 etName.getText().toString(),
                                 etPhone.getText().toString(),
-                                Boolean.FALSE);
+                                isFavorite);
                         getActivity().onBackPressed();
 
                     } else {
@@ -164,10 +178,11 @@ public class AddContactFragment extends Fragment {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putString("imagePath", imagePath);
+        outState.putString("ImagePath", imagePath);
         outState.putString("Name", etName.getText().toString());
         outState.putString("Phone", etPhone.getText().toString());
-        outState.putParcelable("bitmap", contactImage);
+        outState.putParcelable("Bitmap", contactImage);
+        outState.putBoolean("IsFavorite", isFavorite);
         super.onSaveInstanceState(outState);
     }
 

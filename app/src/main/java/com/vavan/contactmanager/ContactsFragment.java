@@ -12,6 +12,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,11 +21,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class ContactsFragment extends ListFragment implements LoaderManager.LoaderCallbacks {
+
+    ImageButton btAddFragment;
 
     DBHelper db;
     ContactCursorAdapter contactCursorAdapter;
@@ -54,6 +58,17 @@ public class ContactsFragment extends ListFragment implements LoaderManager.Load
         contactCursorAdapter = new ContactCursorAdapter(getActivity(),cursor,0);
 
         setListAdapter(contactCursorAdapter);
+
+        btAddFragment = (ImageButton)view.findViewById(R.id.btOpenAddContactFragment);
+        btAddFragment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(getActivity(), AddContactActivity.class);
+                startActivity(intent);
+                Log.d("MyLog", "Contacts onClick");
+            }
+        });
 
         alertDialog = new AlertDialog.Builder(getActivity());
         alertDialog.setTitle("Attention!");

@@ -19,7 +19,7 @@
             <corners android:topLeftRadius="3dp" android:topRightRadius="3dp"/>
             <stroke
                 android:width="3dp"
-                android:color="#000000"/>
+                android:color="#555"/>
         </shape>
     </item>
 </layer-list>

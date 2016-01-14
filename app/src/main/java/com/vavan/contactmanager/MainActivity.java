@@ -13,14 +13,12 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
     private FragmentTabHost mTabHost;
-    ImageButton btAddFragment;
+    //ImageButton btAddFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
 
         mTabHost = (FragmentTabHost)findViewById(android.R.id.tabhost);
         mTabHost.setup(this, getSupportFragmentManager(), R.id.realtabcontent);
@@ -38,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setIcon(R.drawable.ic_stat_messagephone);
 
-        btAddFragment = (ImageButton)findViewById(R.id.btOpenAddContactFragment);
+        /*btAddFragment = (ImageButton)findViewById(R.id.btOpenAddContactFragment);
         btAddFragment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -47,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
 
             }
-        });
+        });*/
 
     }
 

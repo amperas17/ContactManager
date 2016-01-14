@@ -21,12 +21,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
 public class FavoritesFragment extends ListFragment implements LoaderManager.LoaderCallbacks{
+
+    ImageButton btAddFragment;
 
     DBHelper db;
     ContactCursorAdapter contactCursorAdapter;
@@ -51,6 +54,18 @@ public class FavoritesFragment extends ListFragment implements LoaderManager.Loa
         View view = inflater.inflate(R.layout.fragment_favorites, container, false);
 
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Favorites");
+
+        btAddFragment = (ImageButton)view.findViewById(R.id.btOpenAddContactFragment);
+        btAddFragment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(getActivity(), AddContactActivity.class);
+                intent.putExtra("IsFavorite", "true");
+                startActivity(intent);
+
+            }
+        });
 
         Cursor cursor = db.getAllFavoritesCursor();
         contactCursorAdapter = new ContactCursorAdapter(getActivity(),cursor,0);
@@ -152,6 +167,9 @@ public class FavoritesFragment extends ListFragment implements LoaderManager.Loa
     public void onResume() {
         super.onResume();
         getLoaderManager().restartLoader(0, null, this);
+        contactSelectedBDID = 0;
+        contactSelectedDescription = null;
+        contactSelectedPhoneNumber = null;
     }
 
     @Override
